@@ -8,6 +8,14 @@ function getEllapsedTime(start: number, end: number) {
   return `${(end - start).toFixed(3)}ms`;
 }
 
+async function timeit(func: () => Promise<string> | string) {
+  const start = performance.now();
+  const logMessage = await func();
+  const end = performance.now();
+
+  console.log(`${getEllapsedTime(start, end)}: ${logMessage}`);
+}
+
 (async () => {
   const [, , yearAsString, dayAsString] = process.argv;
 
@@ -25,33 +33,40 @@ function getEllapsedTime(start: number, end: number) {
 
     const start = performance.now();
 
-    await runner.getInput(year, day);
-    const afterInput = performance.now();
-    console.log(`${getEllapsedTime(start, afterInput)}: Loading input...\n`);
+    await timeit(async () => {
+      await runner.getInput(year, day);
+      return 'Loading input...\n';
+    });
 
-    runner.parsePart1();
-    const afterParse1 = performance.now();
-    console.log(`${getEllapsedTime(afterInput, afterParse1)}: Parsing input 1...`);
+    await timeit(() => {
+      runner.parsePart1();
+      return 'Parsing input 1...';
+    });
 
-    const part1Answer = runner.part1();
-    const afterPart1 = performance.now();
-    console.log(`${getEllapsedTime(afterParse1, afterPart1)}: Part 1: ${part1Answer}`);
+    await timeit(() => {
+      const answer = runner.part1();
+      return `Part 1: ${answer}\n`;
+    });
 
-    runner.parsePart2();
-    const afterParse2 = performance.now();
-    console.log(`\n${getEllapsedTime(afterPart1, afterParse2)}: Parsing input 2...`);
+    await timeit(() => {
+      runner.parsePart2();
+      return 'Parsing input 2...';
+    });
 
-    const part2Answer = runner.part2();
+    await timeit(() => {
+      const answer = runner.part2();
+      return `Part 2: ${answer}`;
+    });
+
     const end = performance.now();
-    console.log(`${getEllapsedTime(afterParse2, end)}: Part 2: ${part2Answer}`);
 
-    console.log(`\nTotal time ellapsed: ${end - start}ms`);
+    console.log(`\nTotal time ellapsed: ${getEllapsedTime(start, end)}`);
   } catch (error) {
     console.error('---- Error ----');
 
     if ((error as Error).message.includes('Cannot find module')) {
       console.error('No runner found for that day');
-      return process.exit(1);
+      return;
     }
 
     console.error(error);
