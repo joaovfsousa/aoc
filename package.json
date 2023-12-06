@@ -7,7 +7,7 @@
   "scripts": {
     "build": "swc src --out-dir dist --source-maps --config-file .swcrc.build",
     "build:tsc": "tsc --build tsconfig.build.json",
-    "dev": "nodemon --watch src --exec \"pnpm start\"",
+    "dev": "nodemon -q --watch src --exec \"pnpm start\"",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "lint-staged",
     "lint:dev": "eslint . --ext .js,.ts",

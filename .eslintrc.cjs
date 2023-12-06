@@ -19,7 +19,12 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'simple-import-sort', 'no-relative-import-paths'],
+  plugins: [
+    '@typescript-eslint',
+    'simple-import-sort',
+    'import',
+    'no-relative-import-paths',
+  ],
   root: true,
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -31,7 +36,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     'linebreak-style': ['error', 'unix'],
     'no-relative-import-paths/no-relative-import-paths': [
-      'warn',
+      'error',
       { allowSameFolder: true, prefix: '@src', rootDir: 'src' },
     ],
     'no-unused-vars': 'off',
