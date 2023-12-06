@@ -14,10 +14,11 @@ export abstract class Runner {
 
     this.lines = input.toString().split('\n');
     this.lines.pop();
-    console.log(`Input size: ${this.lines.length}\n`);
+    console.log(`Input size: ${this.lines.length} lines\n`);
   }
 
-  abstract parse(): void;
+  abstract parsePart1(): void;
   abstract part1(): string;
+  abstract parsePart2(): void;
   abstract part2(): string;
 }

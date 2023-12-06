@@ -27,21 +27,23 @@ function getEllapsedTime(start: number, end: number) {
 
     await runner.getInput(year, day);
     const afterInput = performance.now();
-    console.log(`${getEllapsedTime(start, afterInput)}: Loading input...`);
+    console.log(`${getEllapsedTime(start, afterInput)}: Loading input...\n`);
 
-    // TODO: Refactor to do 2 part parsing
-
-    runner.parse();
-    const afterParse = performance.now();
-    console.log(`${getEllapsedTime(afterInput, afterParse)}: Parsing input...`);
+    runner.parsePart1();
+    const afterParse1 = performance.now();
+    console.log(`${getEllapsedTime(afterInput, afterParse1)}: Parsing input 1...`);
 
     const part1Answer = runner.part1();
     const afterPart1 = performance.now();
-    console.log(`${getEllapsedTime(afterParse, afterPart1)}: Part 1: ${part1Answer}`);
+    console.log(`${getEllapsedTime(afterParse1, afterPart1)}: Part 1: ${part1Answer}`);
+
+    runner.parsePart2();
+    const afterParse2 = performance.now();
+    console.log(`\n${getEllapsedTime(afterPart1, afterParse2)}: Parsing input 2...`);
 
     const part2Answer = runner.part2();
     const end = performance.now();
-    console.log(`${getEllapsedTime(afterPart1, end)}: Part 2: ${part2Answer}`);
+    console.log(`${getEllapsedTime(afterParse2, end)}: Part 2: ${part2Answer}`);
 
     console.log(`\nTotal time ellapsed: ${end - start}ms`);
   } catch (error) {

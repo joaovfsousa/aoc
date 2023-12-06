@@ -21,7 +21,7 @@ const parseNum = (num: string): string => {
 class DayRunner extends Runner {
   private lineNumbers: string[][];
 
-  parse(): void {
+  parsePart1(): void {
     this.lineNumbers = this.lines.map((line) => {
       return line.replace(/\D/g, '').split('');
     });
@@ -38,15 +38,16 @@ class DayRunner extends Runner {
       }, 0)
       .toString();
   }
-  part2(): string {
+
+  parsePart2(): void {
     this.lineNumbers = this.lines.map((line) => {
       return Array.from(line.matchAll(numsRegex))
-        .map((x) => {
-          return x.find(Boolean)!;
-        })
+        .map((x) => x.find(Boolean)!)
         .map(parseNum);
     });
+  }
 
+  part2(): string {
     return this.part1();
   }
 }
