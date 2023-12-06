@@ -29,6 +29,8 @@ function getEllapsedTime(start: number, end: number) {
     const afterInput = performance.now();
     console.log(`${getEllapsedTime(start, afterInput)}: Loading input...`);
 
+    // TODO: Refactor to do 2 part parsing
+
     runner.parse();
     const afterParse = performance.now();
     console.log(`${getEllapsedTime(afterInput, afterParse)}: Parsing input...`);
@@ -41,7 +43,7 @@ function getEllapsedTime(start: number, end: number) {
     const end = performance.now();
     console.log(`${getEllapsedTime(afterPart1, end)}: Part 2: ${part2Answer}`);
 
-    console.log(`Total time ellapsed: ${end - start}ms`);
+    console.log(`\nTotal time ellapsed: ${end - start}ms`);
   } catch (error) {
     console.error('---- Error ----');
 

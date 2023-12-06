@@ -13,6 +13,8 @@ export abstract class Runner {
     );
 
     this.lines = input.toString().split('\n');
+    this.lines.pop();
+    console.log(`Input size: ${this.lines.length}\n`);
   }
 
   abstract parse(): void;
