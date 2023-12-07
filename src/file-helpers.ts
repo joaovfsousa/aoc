@@ -1,4 +1,18 @@
+import { access } from 'node:fs/promises';
 import path from 'node:path';
+
+export async function fileExists(filename: string) {
+  try {
+    await access(filename);
+    return true;
+  } catch (err) {
+    if ((err as { code: string }).code === 'ENOENT') {
+      return false;
+    } else {
+      throw err;
+    }
+  }
+}
 
 const getFileName = (year: number, day: number, dir: 'inputs' | 'days', ext: string) => {
   return path.join(

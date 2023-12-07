@@ -1,0 +1,25 @@
+import { Solution } from '@src/solution';
+
+class DaySolution extends Solution {
+  parsePart1(): void {
+    this.lines.map((line) => {
+      void line;
+    });
+  }
+
+  part1(): string {
+    return 'TODO';
+  }
+
+  parsePart2(): void {
+    this.lines.map((line) => {
+      void line;
+    });
+  }
+
+  part2(): string {
+    return 'TODO';
+  }
+}
+
+export const solution = new DaySolution();

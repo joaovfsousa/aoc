@@ -15,6 +15,7 @@
     "prepare": "husky install",
     "start": "ts-node --swc src/index.ts",
     "start:tsc": "ts-node src/index.ts",
+    "setup": "ts-node --swc src/setup-day.ts",
     "test": "pnpm run test:unit",
     "test:all": "jest",
     "test:all:watch": "pnpm run test:unit -- --watch",
