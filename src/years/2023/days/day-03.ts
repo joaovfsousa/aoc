@@ -25,18 +25,20 @@ class SNumber {
   }
 
   isAdjacentToASymbol(symbols: SSymbol[]): boolean {
-    return symbols.some((symbol) => {
-      if (Math.abs(symbol.position.y - this.position.y) > 1) return false;
+    return symbols.some(this.isAdjacentTo.bind(this));
+  }
 
-      return (
-        symbol.position.x >= this.position.x - 1 &&
-        symbol.position.x <= this.lastDigitX + 1
-      );
-    });
+  isAdjacentTo(symbol: SSymbol): boolean {
+    if (Math.abs(symbol.position.y - this.position.y) > 1) return false;
+
+    return (
+      symbol.position.x >= this.position.x - 1 && symbol.position.x <= this.lastDigitX + 1
+    );
   }
 }
 
 class DaySolution extends Solution {
+  // TODO: split in a map by Y, so we can reduce the amount of items we have to search for.
   private numbers: SNumber[] = [];
   private symbols: SSymbol[] = [];
 
@@ -82,15 +84,34 @@ class DaySolution extends Solution {
   }
 
   parsePart2() {
-    this.lines.map((line) => {
-      void line;
-    });
-
-    return 'TODO';
+    return 'Nothing to do';
   }
 
   part2(): string {
-    return 'TODO';
+    return this.symbols
+      .filter((s) => s.value === '*')
+      .map((s) => {
+        const value = {
+          gearRatio: 1,
+          adjacentNumbersCount: 0,
+        };
+
+        const adjacentNumbers = this.numbers.filter((num) => num.isAdjacentTo(s));
+
+        value.adjacentNumbersCount = adjacentNumbers.length;
+
+        if (value.adjacentNumbersCount === 2) {
+          const [numA, numB] = adjacentNumbers;
+          value.gearRatio = numA.toNumber() * numB.toNumber();
+        }
+
+        return value;
+      })
+      .filter((v) => v.adjacentNumbersCount === 2)
+      .reduce((acc, actual) => {
+        return acc + actual.gearRatio;
+      }, 0)
+      .toString();
   }
 }
 

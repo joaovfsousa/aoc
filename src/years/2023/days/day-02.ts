@@ -59,7 +59,7 @@ class DaySolution extends Solution {
   }
 
   parsePart2() {
-    return 'Not to do';
+    return 'Nothing to do';
   }
 
   part2(): string {
