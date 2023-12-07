@@ -1,25 +1,27 @@
-import { Runner } from '@src/runner';
+import { Solution } from '@src/solution';
 
-const nums = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-
-const numsRegex = new RegExp(
-  nums
-    .map((num) => `(?=(${num}))`)
-    .join('|')
-    .concat('|\\d'),
-  'g'
-);
-
-const parseNum = (num: string): string => {
-  const parsedNumber = parseInt(num);
-  if (!isNaN(parsedNumber)) {
-    return num;
-  }
-  return (nums.indexOf(num) + 1).toString();
-};
-
-class DayRunner extends Runner {
+class DaySolution extends Solution {
   private lineNumbers: string[][];
+
+  private static readonly nums = [
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+  ];
+
+  private static readonly numsRegex = new RegExp(
+    this.nums
+      .map((num) => `(?=(${num}))`)
+      .join('|')
+      .concat('|\\d'),
+    'g'
+  );
 
   parsePart1(): void {
     this.lineNumbers = this.lines.map((line) => {
@@ -41,15 +43,24 @@ class DayRunner extends Runner {
 
   parsePart2(): void {
     this.lineNumbers = this.lines.map((line) => {
-      return Array.from(line.matchAll(numsRegex))
+      return Array.from(line.matchAll(DaySolution.numsRegex))
         .map((x) => x.find(Boolean)!)
-        .map(parseNum);
+        .map(DaySolution.parseNum);
     });
   }
 
   part2(): string {
     return this.part1();
   }
+
+  private static parseNum(num: string): string {
+    const parsedNumber = parseInt(num);
+    if (!isNaN(parsedNumber)) {
+      return num;
+    }
+
+    return (DaySolution.nums.indexOf(num) + 1).toString();
+  }
 }
 
-export const runner = new DayRunner();
+export const solution = new DaySolution();

@@ -1,16 +1,12 @@
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 
-export abstract class Runner {
+import { getInputFileName } from './file-helpers';
+
+export abstract class Solution {
   lines: string[];
 
   async getInput(year: number, day: number) {
-    const input = await readFile(
-      path.join(
-        __dirname,
-        `years/${year}/inputs/day-${day.toString().padStart(2, '0')}.txt`
-      )
-    );
+    const input = await readFile(getInputFileName(year, day));
 
     this.lines = input.toString().split('\n');
     this.lines.pop();

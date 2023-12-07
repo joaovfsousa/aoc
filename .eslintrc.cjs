@@ -34,6 +34,12 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': ['error', { ignoreIIFE: true }],
     '@typescript-eslint/no-misused-promises': 'error',
     '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    '@typescript-eslint/unbound-method': [
+      'error',
+      {
+        ignoreStatic: true,
+      },
+    ],
     'linebreak-style': ['error', 'unix'],
     'no-relative-import-paths/no-relative-import-paths': [
       'error',

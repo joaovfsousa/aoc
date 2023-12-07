@@ -1,7 +1,8 @@
-import { Runner } from './runner';
+import { getSolutionFileName } from './file-helpers';
+import { Solution } from './solution';
 
 interface Day {
-  runner: Runner;
+  solution: Solution;
 }
 
 function getEllapsedTime(start: number, end: number) {
@@ -25,36 +26,34 @@ async function timeit(func: () => Promise<string> | string) {
   console.log(`---- ${year}, Day ${day} ----\n`);
 
   try {
-    const module = (await import(
-      `@src/years/${year}/days/day-${day.toString().padStart(2, '0')}.ts`
-    )) as Day;
+    const module = (await import(getSolutionFileName(year, day))) as Day;
 
-    const { runner } = module;
+    const { solution } = module;
 
     const start = performance.now();
 
     await timeit(async () => {
-      await runner.getInput(year, day);
+      await solution.getInput(year, day);
       return 'Loading input...\n';
     });
 
     await timeit(() => {
-      runner.parsePart1();
+      solution.parsePart1();
       return 'Parsing input 1...';
     });
 
     await timeit(() => {
-      const answer = runner.part1();
+      const answer = solution.part1();
       return `Part 1: ${answer}\n`;
     });
 
     await timeit(() => {
-      runner.parsePart2();
+      solution.parsePart2();
       return 'Parsing input 2...';
     });
 
     await timeit(() => {
-      const answer = runner.part2();
+      const answer = solution.part2();
       return `Part 2: ${answer}`;
     });
 
