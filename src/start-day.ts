@@ -47,7 +47,7 @@ import { fileExists, getInputFileName, getSolutionFileName } from './file-helper
   console.log('Files created successfully');
 
   execSync(
-    `tmux splitw -v -c '#{pane_current_path}' zsh -c 'nvim ${solutionFileName} ${inputFileName}' && tmux select-pane -U \\; swap-pane -s '!' \\; select-pane -U`
+    `tmux splitw -v -c '#{pane_current_path}' zsh -c 'nvim ${solutionFileName} ${inputFileName}; zsh' && tmux select-pane -U \\; swap-pane -s '!' \\; select-pane -U`
   );
 
   execSync(`pnpm run dev ${year} ${day}`, { stdio: 'inherit' });
