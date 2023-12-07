@@ -10,7 +10,7 @@ export abstract class Solution {
 
     this.lines = input.toString().split('\n');
     this.lines.pop();
-    console.log(`Input size: ${this.lines.length} lines\n`);
+    return `Input size: ${this.lines.length} lines`;
   }
 
   abstract parsePart1(): void;

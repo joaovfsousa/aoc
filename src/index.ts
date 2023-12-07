@@ -14,7 +14,7 @@ async function timeit(func: () => Promise<string> | string) {
   const logMessage = await func();
   const end = performance.now();
 
-  console.log(`${getEllapsedTime(start, end)}: ${logMessage}`);
+  console.log(`${getEllapsedTime(start, end)} => ${logMessage} `);
 }
 
 (async () => {
@@ -33,28 +33,33 @@ async function timeit(func: () => Promise<string> | string) {
     const start = performance.now();
 
     await timeit(async () => {
+      process.stdout.write('Load input => ');
       await solution.getInput(year, day);
-      return 'Loading input...\n';
+      return 'DONE\n';
     });
 
     await timeit(() => {
+      process.stdout.write('Parse input 1 => ');
       solution.parsePart1();
-      return 'Parsing input 1...';
+      return 'DONE';
     });
 
     await timeit(() => {
+      process.stdout.write('Part 1 => ');
       const answer = solution.part1();
-      return `Part 1: ${answer}\n`;
+      return `${answer}`;
     });
 
     await timeit(() => {
+      process.stdout.write('\nParse input 2 => ');
       solution.parsePart2();
-      return 'Parsing input 2...';
+      return 'DONE';
     });
 
     await timeit(() => {
+      process.stdout.write('Part 2 => ');
       const answer = solution.part2();
-      return `Part 2: ${answer}`;
+      return answer;
     });
 
     const end = performance.now();
