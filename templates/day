@@ -1,20 +1,24 @@
 import { Solution } from '@src/solution';
 
 class DaySolution extends Solution {
-  parsePart1(): void {
+  parsePart1() {
     this.lines.map((line) => {
       void line;
     });
+
+    return 'TODO';
   }
 
   part1(): string {
     return 'TODO';
   }
 
-  parsePart2(): void {
+  parsePart2() {
     this.lines.map((line) => {
       void line;
     });
+
+    return 'TODO'
   }
 
   part2(): string {

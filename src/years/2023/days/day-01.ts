@@ -23,10 +23,12 @@ class DaySolution extends Solution {
     'g'
   );
 
-  parsePart1(): void {
+  parsePart1() {
     this.lineNumbers = this.lines.map((line) => {
       return line.replace(/\D/g, '').split('');
     });
+
+    return 'DONE';
   }
 
   part1(): string {
@@ -41,12 +43,14 @@ class DaySolution extends Solution {
       .toString();
   }
 
-  parsePart2(): void {
+  parsePart2() {
     this.lineNumbers = this.lines.map((line) => {
       return Array.from(line.matchAll(DaySolution.numsRegex))
         .map((x) => x.find(Boolean)!)
         .map(DaySolution.parseNum);
     });
+
+    return 'DONE';
   }
 
   part2(): string {

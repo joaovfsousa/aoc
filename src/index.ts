@@ -34,26 +34,26 @@ async function timeit(func: () => Promise<string> | string) {
 
     await timeit(async () => {
       process.stdout.write('Load input => ');
-      await solution.getInput(year, day);
-      return 'DONE\n';
+      const answer = solution.getInput(year, day);
+      return answer;
     });
 
     await timeit(() => {
       process.stdout.write('Parse input 1 => ');
-      solution.parsePart1();
-      return 'DONE';
+      const answer = solution.parsePart1();
+      return answer;
     });
 
     await timeit(() => {
       process.stdout.write('Part 1 => ');
       const answer = solution.part1();
-      return `${answer}`;
+      return answer;
     });
 
     await timeit(() => {
       process.stdout.write('\nParse input 2 => ');
-      solution.parsePart2();
-      return 'DONE';
+      const answer = solution.parsePart2();
+      return answer;
     });
 
     await timeit(() => {

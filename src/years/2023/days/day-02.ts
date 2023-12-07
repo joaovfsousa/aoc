@@ -11,7 +11,7 @@ type Game = GameSet[];
 class DaySolution extends Solution {
   private games: Game[];
 
-  parsePart1(): void {
+  parsePart1() {
     this.games = this.lines.map((line) =>
       line
         .split(': ') // game: sets
@@ -29,6 +29,8 @@ class DaySolution extends Solution {
             );
         })
     );
+
+    return 'DONE';
   }
 
   part1(): string {
@@ -56,8 +58,8 @@ class DaySolution extends Solution {
       .toString();
   }
 
-  parsePart2(): void {
-    void 'Not to do';
+  parsePart2() {
+    return 'Not to do';
   }
 
   part2(): string {

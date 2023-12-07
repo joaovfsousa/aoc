@@ -10,11 +10,11 @@ export abstract class Solution {
 
     this.lines = input.toString().split('\n');
     this.lines.pop();
-    return `Input size: ${this.lines.length} lines`;
+    return `Input size: ${this.lines.length} lines\n`;
   }
 
-  abstract parsePart1(): void;
+  abstract parsePart1(): string;
   abstract part1(): string;
-  abstract parsePart2(): void;
+  abstract parsePart2(): string;
   abstract part2(): string;
 }
