@@ -2,11 +2,21 @@ import { Solution } from '@src/solution';
 
 class Card {
   public cardNumbers: Set<number>;
+  public copies = 1;
+  private matches: number[];
   constructor(
     public winningNumbers: number[],
     cardNumbers: number[]
   ) {
     this.cardNumbers = new Set(cardNumbers);
+  }
+
+  getMatches() {
+    if (!this.matches) {
+      this.matches = this.winningNumbers.filter((wn) => this.cardNumbers.has(wn));
+    }
+
+    return this.matches;
   }
 }
 
@@ -39,9 +49,7 @@ class DaySolution extends Solution {
   part1(): string {
     return this.cards
       .reduce((acc, card) => {
-        const cardPoints = card.winningNumbers.filter((wn) =>
-          card.cardNumbers.has(wn)
-        ).length;
+        const cardPoints = card.getMatches().length;
 
         if (!cardPoints) return acc;
 
@@ -51,15 +59,32 @@ class DaySolution extends Solution {
   }
 
   parsePart2() {
-    this.lines.map((line) => {
-      void line;
-    });
-
-    return 'TODO';
+    return 'DONE';
   }
 
   part2(): string {
-    return 'TODO';
+    return this.cards
+      .reduce((acc, card, index) => {
+        const matches = card.getMatches().length;
+
+        this.addCopiesToNextCards(matches, card.copies, index);
+
+        return acc + card.copies;
+      }, 0)
+      .toString();
+  }
+
+  private addCopiesToNextCards(
+    copiesToAdd: number,
+    originalCardCopies: number,
+    originalCardIndex: number
+  ) {
+    for (let i = 1; i <= copiesToAdd; i++) {
+      const index = originalCardIndex + i;
+      if (index < this.cards.length) {
+        this.cards[index].copies += originalCardCopies;
+      }
+    }
   }
 }
 
