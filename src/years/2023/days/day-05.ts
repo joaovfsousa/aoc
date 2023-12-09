@@ -17,13 +17,19 @@ class Range {
     }
     return null;
   }
+
+  *toIter() {
+    for (let i = 0; i < this.rangeLength; i++) {
+      yield this.sourceStart + i;
+    }
+  }
 }
 
 class SMap {
   constructor(public ranges: Range[] = []) {}
 
-  sort() {
-    this.ranges.sort((rA, rB) => rA.sourceStart - rB.sourceStart);
+  sortBy(key: 'sourceStart' | 'destinationStart' = 'sourceStart') {
+    this.ranges.sort((rA, rB) => rA[key] - rB[key]);
   }
 
   addRange(range: Range) {
@@ -34,6 +40,8 @@ class SMap {
 class DaySolution extends Solution {
   private maps: SMap[] = [];
   private seeds: number[];
+  private seedsAsRanges: SMap = new SMap();
+  private minLoc = Infinity;
 
   parsePart1() {
     this.seeds = this.lines.at(0)!.split(': ').at(1)!.split(' ').map(pureParseInt);
@@ -55,45 +63,74 @@ class DaySolution extends Solution {
         );
     });
 
-    this.maps.forEach((map) => map.sort());
+    this.maps.forEach((map) => map.sortBy('sourceStart'));
 
     return 'DONE';
   }
 
   part1(): string {
-    return this.seeds
-      .map((seed) => {
-        let lastValue = seed;
-        this.maps.forEach((map) => {
-          const correspondingRange = map.ranges.find(
-            (r) => !!r.sourceToDestination(lastValue)
-          );
+    this.seeds.forEach((seed) => {
+      const loc = this.getLocationForSeed(seed);
 
-          if (correspondingRange) {
-            lastValue = correspondingRange.sourceToDestination(lastValue)!;
-          }
-        });
-        return lastValue;
-      })
-      .reduce((prev, curr) => {
-        if (prev < curr) {
-          return prev;
-        }
-        return curr;
-      }, Infinity)
-      .toString();
+      if (loc < this.minLoc) {
+        this.minLoc = loc;
+      }
+    });
+
+    return this.minLoc.toString();
   }
 
   parsePart2() {
-    this.lines.map((line) => {
-      void line;
-    });
+    this.minLoc = Infinity;
 
-    return 'TODO';
+    let lastValue: number;
+
+    this.lines
+      .at(0)!
+      .split(': ')
+      .at(1)!
+      .split(' ')
+      .forEach((numAsString, index) => {
+        if (index % 2 === 0) {
+          lastValue = pureParseInt(numAsString);
+          return;
+        }
+
+        this.seedsAsRanges.addRange(new Range(0, lastValue, pureParseInt(numAsString)));
+      });
+
+    return 'DONE';
   }
 
   part2(): string {
-    return 'TODO';
+    console.log('Total Ranges:', this.seedsAsRanges.ranges.length);
+
+    this.seedsAsRanges.ranges.forEach((range, index) => {
+      console.log(`Processing range: ${index + 1}/${this.seedsAsRanges.ranges.length}`);
+      for (const seed of range.toIter()) {
+        const loc = this.getLocationForSeed(seed);
+
+        if (loc < this.minLoc) {
+          this.minLoc = loc;
+        }
+      }
+    });
+
+    return this.minLoc.toString();
+  }
+
+  private getLocationForSeed(seed: number) {
+    let lastValue = seed;
+    this.maps.forEach((map) => {
+      const correspondingRange = map.ranges.find(
+        (r) => !!r.sourceToDestination(lastValue)
+      );
+
+      if (correspondingRange) {
+        lastValue = correspondingRange.sourceToDestination(lastValue)!;
+      }
+    });
+    return lastValue;
   }
 }
 
