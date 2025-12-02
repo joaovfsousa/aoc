@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
+	_ "github.com/joaovfsousa/aoc/solutions/2025"
 )
 
 func main() {
