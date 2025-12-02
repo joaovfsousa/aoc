@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
 
@@ -14,6 +16,35 @@ import (
 	"github.com/joaovfsousa/aoc/pkg/aoc"
 	_ "github.com/joaovfsousa/aoc/solutions/2025"
 )
+
+func rebuildAndRestart(year, day, part int, inputPath string) error {
+	tmpDir := os.TempDir()
+	tmpBinary := filepath.Join(tmpDir, fmt.Sprintf("aoc-runner-%d", os.Getpid()))
+
+	buildCmd := exec.Command("go", "build", "-o", tmpBinary, "./cmd/runner")
+	buildCmd.Stdout = os.Stdout
+	buildCmd.Stderr = os.Stderr
+	if err := buildCmd.Run(); err != nil {
+		return fmt.Errorf("build failed: %w", err)
+	}
+
+	args := []string{tmpBinary}
+	if year != time.Now().Year() {
+		args = append(args, "-year", fmt.Sprintf("%d", year))
+	}
+	if day != 0 {
+		args = append(args, "-day", fmt.Sprintf("%d", day))
+	}
+	if part != 0 {
+		args = append(args, "-part", fmt.Sprintf("%d", part))
+	}
+	if inputPath != "" {
+		args = append(args, "-input", inputPath)
+	}
+
+	// Execute the new binary, replacing this process
+	return syscall.Exec(tmpBinary, args, os.Environ())
+}
 
 func main() {
 	year := flag.Int("year", time.Now().Year(), "AoC year")
@@ -53,6 +84,15 @@ func main() {
 			break
 		}
 
-		fmt.Println()
+		// Rebuild and restart
+		fmt.Println("\nRebuilding...")
+		if err := rebuildAndRestart(*year, *day, *part, *inputPath); err != nil {
+			log.Errorf("rebuild failed: %v", err)
+			fmt.Println("Press 'enter' to continue...")
+			reader.ReadRune()
+			continue
+		}
+		// If rebuildAndRestart succeeds, it will have replaced this process
+		break
 	}
 }
