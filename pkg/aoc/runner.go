@@ -62,7 +62,7 @@ func Run(opts RunOptions) error {
 			if runErr != nil {
 				return fmt.Errorf("%s part %d failed: %w", k, part, runErr)
 			}
-			fmt.Printf("%s part %d → %v    (%.3fms)", k, part, res, float64(dur.Microseconds())/1000)
+			fmt.Printf("%s part %d → %v    (%.3fms)\n", k, part, res, float64(dur.Microseconds())/1000)
 			return nil
 		}
 
