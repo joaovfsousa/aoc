@@ -22,7 +22,7 @@ func DownloadInput(year, day int, session string) error {
 		return err
 	}
 	req.AddCookie(&http.Cookie{Name: "session", Value: session})
-	req.Header.Set("User-Agent", "aoc-go-framework - github.com/joaovfsousa/aoc")
+	req.Header.Set("User-Agent", "aoc-go - github.com/joaovfsousa/aoc")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

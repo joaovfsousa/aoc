@@ -10,7 +10,6 @@ scaffold:
 	$(SCAFFOLD_GO) -year=$(year) -day=$(day)
 
 download:
-	@echo "download requires AOC_SESSION env var set (your session cookie)"
 	go run ./cmd/downloader -year=$(year) -day=$(day)
 
 test:
