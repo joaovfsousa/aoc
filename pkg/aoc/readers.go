@@ -3,8 +3,18 @@ package aoc
 import (
 	"bufio"
 	"io"
+	"iter"
 	"os"
+
+	"github.com/charmbracelet/log"
 )
+
+func handleCloseError(fn func() error, path string) {
+	err := fn()
+	if err != nil {
+		log.Errorf("Failed to close file %v: %v", path, err)
+	}
+}
 
 // ReadEntireFile reads the entire file into memory as a string.
 // This is the most common pattern for AoC solutions.
@@ -23,7 +33,7 @@ func ReadLines(path string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
+	defer handleCloseError(f.Close, path)
 
 	var lines []string
 	scanner := bufio.NewScanner(f)
@@ -31,6 +41,34 @@ func ReadLines(path string) ([]string, error) {
 		lines = append(lines, scanner.Text())
 	}
 	return lines, scanner.Err()
+}
+
+func IterLines(path string) iter.Seq2[string, error] {
+	return func(yield func(string, error) bool) {
+		f, err := os.Open(path)
+		log.Info(path)
+		if err != nil {
+			yield("", err)
+
+			log.Error(err)
+			return
+		}
+
+		defer handleCloseError(f.Close, path)
+
+		scanner := bufio.NewScanner(f)
+
+		log.Info("scanner created")
+		for scanner.Scan() {
+			line := scanner.Text()
+
+			stopIteration := yield(line, nil)
+
+			if !stopIteration {
+				break
+			}
+		}
+	}
 }
 
 // ReadLinesNonEmpty reads the file line by line and returns only non-empty lines.
@@ -57,7 +95,7 @@ func ReadCharByChar(path string, fn func(r rune, pos int) error) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer handleCloseError(f.Close, path)
 
 	reader := bufio.NewReader(f)
 	pos := 0
@@ -81,4 +119,3 @@ func ReadCharByChar(path string, fn func(r rune, pos int) error) error {
 func ReadBytes(path string) ([]byte, error) {
 	return os.ReadFile(path)
 }
-
