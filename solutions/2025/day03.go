@@ -23,6 +23,14 @@ func runeToInt(r rune) int {
 	return i
 }
 
+func stringToInt(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to convert %v to int", s))
+	}
+	return i
+}
+
 func (d Day3) Part1(inputPath string) (any, error) {
 	total := 0
 	for l := range aoc.IterLines(inputPath) {
@@ -62,7 +70,38 @@ func (d Day3) Part1(inputPath string) (any, error) {
 }
 
 func (d Day3) Part2(inputPath string) (any, error) {
-	return nil, nil
+	total := 0
+
+	for l := range aoc.IterLines(inputPath) {
+		lenLine := len(l)
+		num := l[:12]
+
+		for evalIndex := 12; evalIndex < lenLine; evalIndex++ {
+			eval := l[evalIndex]
+			mmax := num
+			for toRemove := range 12 {
+				firstPart := num[:toRemove]
+				secondPart := num[toRemove+1:]
+				newNum := firstPart + secondPart + string(eval)
+
+				log.Debugf("evalIndex= %v, toRemove= %v, num= %v, firstPart= %v, secondPart= %v, eval= %v", evalIndex, toRemove, num, firstPart, secondPart, eval)
+
+				if stringToInt(newNum) > stringToInt(mmax) {
+					mmax = newNum
+				}
+			}
+
+			if stringToInt(mmax) > stringToInt(num) {
+				num = mmax
+			}
+		}
+
+		log.Debugf("Max = %v", num)
+
+		total += stringToInt(num)
+	}
+
+	return total, nil
 }
 
 func init() {
