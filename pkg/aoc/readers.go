@@ -46,7 +46,6 @@ func ReadLines(path string) ([]string, error) {
 func IterLines(path string) iter.Seq2[string, error] {
 	return func(yield func(string, error) bool) {
 		f, err := os.Open(path)
-		log.Info(path)
 		if err != nil {
 			yield("", err)
 
@@ -58,7 +57,6 @@ func IterLines(path string) iter.Seq2[string, error] {
 
 		scanner := bufio.NewScanner(f)
 
-		log.Info("scanner created")
 		for scanner.Scan() {
 			line := scanner.Text()
 
