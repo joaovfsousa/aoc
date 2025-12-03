@@ -6,6 +6,9 @@ SCAFFOLD_GO := go run ./cmd/scaffold
 run:
 	$(RUN_GO)
 
+run-day:
+	$(RUN_GO) -year=$(year) -day=$(day)
+
 scaffold:
 	$(SCAFFOLD_GO) -year=$(year) -day=$(day)
 

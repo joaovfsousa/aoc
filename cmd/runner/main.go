@@ -73,6 +73,9 @@ func main() {
 
 	for {
 		fmt.Print("\033[H\033[2J")
+
+		log.Infof("year=%v, day=%v, part=%v", *year, *day, *part)
+
 		if err := aoc.Run(opts); err != nil {
 			log.Infof("run failed: %v", err)
 		}
