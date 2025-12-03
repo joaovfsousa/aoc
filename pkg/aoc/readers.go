@@ -5,6 +5,7 @@ import (
 	"io"
 	"iter"
 	"os"
+	"strings"
 
 	"github.com/charmbracelet/log"
 )
@@ -111,6 +112,56 @@ func ReadCharByChar(path string, fn func(r rune, pos int) error) error {
 		pos += size
 	}
 	return nil
+}
+
+func IterCharByChar(path string) iter.Seq2[string, error] {
+	return func(yield func(string, error) bool) {
+		f, err := os.Open(path)
+		if err != nil {
+			yield("", err)
+
+			log.Error(err)
+			return
+		}
+
+		defer handleCloseError(f.Close, path)
+
+		reader := bufio.NewReader(f)
+
+		for {
+			r, _, err := reader.ReadRune()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				yield("", err)
+				break
+			}
+
+			yield(string(r), nil)
+		}
+	}
+}
+
+func IterBySeparator(path, separator string) iter.Seq2[string, error] {
+	return func(yield func(string, error) bool) {
+		accumulator := strings.Builder{}
+
+		for c := range IterCharByChar(path) {
+			if c == separator {
+				yield(accumulator.String(), nil)
+				accumulator = strings.Builder{}
+				continue
+			}
+
+			if c == "\n" {
+				yield(accumulator.String(), nil)
+				return
+			}
+
+			accumulator.WriteString(c)
+		}
+	}
 }
 
 // ReadBytes reads the entire file as a byte slice.
