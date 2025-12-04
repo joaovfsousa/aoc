@@ -11,7 +11,6 @@ const dayTemplate = `package solutions
 
 import "github.com/joaovfsousa/aoc/pkg/aoc"
 
-// Day{{.Day}} implements aoc.Day for {{.Year}} day {{.Day}}
 type Day{{.Day}} struct{}
 
 func (d Day{{.Day}}) Year() int { return {{.Year}} }
@@ -19,17 +18,13 @@ func (d Day{{.Day}}) Day() int  { return {{.Day}} }
 
 func (d Day{{.Day}}) Part1(inputPath string) (any, error) {
 	// TODO: implement
-	// Use aoc.ReadEntireFile(inputPath) to read the entire file
-	// Or aoc.ReadLines(inputPath) for line-by-line reading
-	// Or aoc.ReadCharByChar(inputPath, ...) for character-by-character reading
+	// Use one of the readers from pkg/aoc/readers.go
 	return nil, nil
 }
 
 func (d Day{{.Day}}) Part2(inputPath string) (any, error) {
 	// TODO: implement
-	// Use aoc.ReadEntireFile(inputPath) to read the entire file
-	// Or aoc.ReadLines(inputPath) for line-by-line reading
-	// Or aoc.ReadCharByChar(inputPath, ...) for character-by-character reading
+	// Use one of the readers from pkg/aoc/readers.go
 	return nil, nil
 }
 
