@@ -1,11 +1,10 @@
 package solutions
 
 import (
-	"strconv"
-
 	"github.com/charmbracelet/log"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
+	"github.com/joaovfsousa/aoc/pkg/aoc/str"
 )
 
 type Day01 struct{}
@@ -31,11 +30,7 @@ func (Day01) Part1(inputPath string) (any, error) {
 		side := l[:1]
 		clicksStr := l[1:]
 
-		clicks, err := strconv.Atoi(clicksStr)
-		if err != nil {
-			log.Errorf("Error transforming %v to integer: %v", clicksStr, err)
-			return -1, nil
-		}
+		clicks := str.StringToInt(clicksStr)
 
 		if side == "L" {
 			dial = modulo100(dial - clicks)
@@ -62,11 +57,7 @@ func (Day01) Part2(inputPath string) (any, error) {
 		side := l[:1]
 		clicksStr := l[1:]
 
-		clicks, err := strconv.Atoi(clicksStr)
-		if err != nil {
-			log.Errorf("Error transforming %v to integer: %v", clicksStr, err)
-			return -1, nil
-		}
+		clicks := str.StringToInt(clicksStr)
 
 		distanceToZero := 0
 

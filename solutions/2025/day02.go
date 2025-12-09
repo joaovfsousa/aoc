@@ -2,12 +2,12 @@ package solutions
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/log"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
+	"github.com/joaovfsousa/aoc/pkg/aoc/str"
 )
 
 type Day2 struct{}
@@ -15,7 +15,7 @@ type Day2 struct{}
 func (d Day2) Year() int { return 2025 }
 func (d Day2) Day() int  { return 2 }
 
-type Range struct {
+type DivisionRange struct {
 	divider int
 	start   int
 	end     int
@@ -26,15 +26,9 @@ func loop(inputPath string, calculateInvalidSum func(i int) int) (int, error) {
 	for r := range aoc.IterBySeparator(inputPath, ",") {
 		sepIndex := strings.Index(r, "-")
 
-		min, err := strconv.Atoi(r[0:sepIndex])
-		if err != nil {
-			return 0, err
-		}
+		min := str.StringToInt(r[0:sepIndex])
 
-		max, err := strconv.Atoi(r[sepIndex+1:])
-		if err != nil {
-			return 0, err
-		}
+		max := str.StringToInt(r[sepIndex+1:])
 
 		for i := min; i < max+1; i++ {
 			invalidIdsSum += calculateInvalidSum(i)
@@ -60,18 +54,18 @@ func calculateInvalidSumPart1(i int) int {
 	return 0
 }
 
-func getRanges(i int) [][]Range {
-	ranges := [][]Range{}
+func getRanges(i int) [][]DivisionRange {
+	ranges := [][]DivisionRange{}
 
 	for j := 1; j < i; j++ {
 		if i%j != 0 { // not a divider
 			continue
 		}
 
-		drs := []Range{}
+		drs := []DivisionRange{}
 
 		for k := 0; k < i; k += j {
-			drs = append(drs, Range{
+			drs = append(drs, DivisionRange{
 				divider: j,
 				start:   k,
 				end:     k + j,

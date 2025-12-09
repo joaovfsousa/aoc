@@ -2,11 +2,11 @@ package solutions
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/charmbracelet/log"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
+	"github.com/joaovfsousa/aoc/pkg/aoc/str"
 )
 
 type Day3 struct{}
@@ -14,33 +14,16 @@ type Day3 struct{}
 func (d Day3) Year() int { return 2025 }
 func (d Day3) Day() int  { return 3 }
 
-func runeToInt(r rune) int {
-	i, err := strconv.Atoi(string(r))
-	if err != nil {
-		panic(fmt.Sprintf("Failed to convert %v to int", r))
-	}
-
-	return i
-}
-
-func stringToInt(s string) int {
-	i, err := strconv.Atoi(s)
-	if err != nil {
-		panic(fmt.Sprintf("Failed to convert %v to int", s))
-	}
-	return i
-}
-
 func (d Day3) Part1(inputPath string) (any, error) {
 	total := 0
 	for l := range aoc.IterLines(inputPath) {
 		lineLen := len(l)
-		firstB := runeToInt(rune(l[0]))
+		firstB := str.StringToInt(string(l[0]))
 
-		secondB := runeToInt(rune(l[1]))
+		secondB := str.StringToInt(string(l[1]))
 
 		for i, nAsRune := range l {
-			n := runeToInt(nAsRune)
+			n := str.StringToInt(string(nAsRune))
 			if i == 0 {
 				continue
 			}
@@ -56,10 +39,7 @@ func (d Day3) Part1(inputPath string) (any, error) {
 			}
 		}
 
-		jottage, err := strconv.Atoi(fmt.Sprintf("%v%v", firstB, secondB))
-		if err != nil {
-			panic(err)
-		}
+		jottage := str.StringToInt(fmt.Sprintf("%v%v", firstB, secondB))
 
 		log.Debugf("jottage = %v", jottage)
 
@@ -86,19 +66,19 @@ func (d Day3) Part2(inputPath string) (any, error) {
 
 				log.Debugf("evalIndex= %v, toRemove= %v, num= %v, firstPart= %v, secondPart= %v, eval= %v", evalIndex, toRemove, num, firstPart, secondPart, eval)
 
-				if stringToInt(newNum) > stringToInt(mmax) {
+				if str.StringToInt(newNum) > str.StringToInt(mmax) {
 					mmax = newNum
 				}
 			}
 
-			if stringToInt(mmax) > stringToInt(num) {
+			if str.StringToInt(mmax) > str.StringToInt(num) {
 				num = mmax
 			}
 		}
 
 		log.Debugf("Max = %v", num)
 
-		total += stringToInt(num)
+		total += str.StringToInt(num)
 	}
 
 	return total, nil
