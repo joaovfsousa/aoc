@@ -22,6 +22,7 @@ type Day4 struct{}
 func (d Day4) Year() int { return 2025 }
 func (d Day4) Day() int  { return 4 }
 
+// TODO: refactor to process with 3 lines instead of loading everything to memory
 func (d Day4) Part1(inputPath string) (any, error) {
 	rows := []string{}
 	totalAccessible := 0
