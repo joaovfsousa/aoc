@@ -29,10 +29,10 @@ func ReadEntireFile(path string) (string, error) {
 
 // ReadLines reads the file line by line and returns all lines as a slice.
 // Empty lines are included. Trailing newlines are removed.
-func ReadLines(path string) ([]string, error) {
+func ReadLines(path string) []string {
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 	defer handleCloseError(f.Close, path)
 
@@ -41,7 +41,7 @@ func ReadLines(path string) ([]string, error) {
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
-	return lines, scanner.Err()
+	return lines
 }
 
 func IterLines(path string) iter.Seq2[string, error] {
@@ -73,10 +73,8 @@ func IterLines(path string) iter.Seq2[string, error] {
 // ReadLinesNonEmpty reads the file line by line and returns only non-empty lines.
 // Trailing newlines are removed.
 func ReadLinesNonEmpty(path string) ([]string, error) {
-	lines, err := ReadLines(path)
-	if err != nil {
-		return nil, err
-	}
+	lines := ReadLines(path)
+
 	var result []string
 	for _, line := range lines {
 		if line != "" {
@@ -149,8 +147,11 @@ func IterBySeparator(path, separator string) iter.Seq2[string, error] {
 
 		for c := range IterCharByChar(path) {
 			if c == separator {
-				yield(accumulator.String(), nil)
-				accumulator = strings.Builder{}
+				string := accumulator.String()
+				if len(string) != 0 {
+					yield(accumulator.String(), nil)
+					accumulator = strings.Builder{}
+				}
 				continue
 			}
 
