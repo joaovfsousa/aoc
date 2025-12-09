@@ -1,6 +1,7 @@
 package solutions
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
@@ -16,8 +17,17 @@ type Range struct {
 	Min, Max int
 }
 
-func (r Range) contains(i int) bool {
+func (r Range) containsElem(i int) bool {
 	return i >= r.Min && i <= r.Max
+}
+
+func (r *Range) extendBy(r2 Range) {
+	r.Min = min(r.Min, r2.Min)
+	r.Max = max(r.Max, r2.Max)
+}
+
+func (r Range) countElem() int {
+	return r.Max - r.Min + 1
 }
 
 func (d Day5) Part1(inputPath string) (any, error) {
@@ -32,7 +42,7 @@ func (d Day5) Part1(inputPath string) (any, error) {
 			id := str.StringToInt(l)
 
 			for _, r := range ranges {
-				if r.contains(id) {
+				if r.containsElem(id) {
 					freshCount++
 					break
 				}
@@ -64,10 +74,32 @@ func (d Day5) Part2(inputPath string) (any, error) {
 
 		sepIndex := strings.Index(l, "-")
 
-		ranges = append(ranges, Range{Min: str.StringToInt(l[:sepIndex]), Max: str.StringToInt(l[sepIndex+1:])})
+		min := str.StringToInt(l[:sepIndex])
+		max := str.StringToInt(l[sepIndex+1:])
+
+		ranges = append(ranges, Range{Min: min, Max: max})
 	}
 
-	return 0, nil
+	slices.SortFunc(ranges, func(r1, r2 Range) int {
+		return r1.Min - r2.Min
+	})
+
+	prev := ranges[0]
+
+	total := 0
+
+	for _, curr := range ranges {
+		if prev.Max >= curr.Min {
+			prev.extendBy(curr)
+		} else {
+			total += prev.countElem()
+			prev = curr
+		}
+	}
+
+	total += prev.countElem()
+
+	return total, nil
 }
 
 func init() {
