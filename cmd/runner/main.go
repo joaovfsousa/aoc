@@ -17,7 +17,7 @@ import (
 	_ "github.com/joaovfsousa/aoc/solutions/2025"
 )
 
-func rebuildAndRestart(year, day, part int, inputPath string) error {
+func rebuildAndRestart(year, day, part int, inputPath string, example bool) error {
 	tmpDir := os.TempDir()
 	tmpBinary := filepath.Join(tmpDir, fmt.Sprintf("aoc-runner-%d", os.Getpid()))
 
@@ -41,6 +41,9 @@ func rebuildAndRestart(year, day, part int, inputPath string) error {
 	if inputPath != "" {
 		args = append(args, "-input", inputPath)
 	}
+	if example {
+		args = append(args, "-e")
+	}
 
 	// Execute the new binary, replacing this process
 	return syscall.Exec(tmpBinary, args, os.Environ())
@@ -51,6 +54,7 @@ func main() {
 	day := flag.Int("day", 0, "AoC day (0 = all registered for the year)")
 	part := flag.Int("part", 0, "Part to run (0 = both)")
 	inputPath := flag.String("input", "", "Path to input file (overrides builtin loader)")
+	example := flag.Bool("e", false, "Use example input (.txt.e suffix)")
 	flag.Parse()
 
 	opts := aoc.RunOptions{
@@ -58,6 +62,7 @@ func main() {
 		Day:       *day,
 		Part:      *part,
 		InputPath: *inputPath,
+		Example:   *example,
 	}
 
 	// Handle Ctrl-C gracefully
@@ -74,7 +79,7 @@ func main() {
 	for {
 		fmt.Print("\033[H\033[2J")
 
-		log.Infof("year=%v, day=%v, part=%v", *year, *day, *part)
+		log.Infof("year=%v, day=%v, part=%v, example=%v", *year, *day, *part, *example)
 
 		if err := aoc.Run(opts); err != nil {
 			log.Infof("run failed: %v", err)
@@ -89,7 +94,7 @@ func main() {
 
 		// Rebuild and restart
 		fmt.Println("\nRebuilding...")
-		if err := rebuildAndRestart(*year, *day, *part, *inputPath); err != nil {
+		if err := rebuildAndRestart(*year, *day, *part, *inputPath, *example); err != nil {
 			log.Errorf("rebuild failed: %v", err)
 			fmt.Println("Press 'enter' to continue...")
 			reader.ReadRune()

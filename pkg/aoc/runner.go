@@ -32,6 +32,7 @@ type RunOptions struct {
 	Day       int // 0 => all
 	Part      int // 0 => both
 	InputPath string
+	Example   bool
 }
 
 // Run runs the requested days/parts
@@ -46,7 +47,7 @@ func Run(opts RunOptions) error {
 		}
 		found = true
 
-		inputPath, err := GetInputPath(opts.Year, d.Day(), opts.InputPath)
+		inputPath, err := GetInputPath(opts.Year, d.Day(), opts.InputPath, opts.Example)
 		if err != nil {
 			return err
 		}
