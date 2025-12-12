@@ -41,8 +41,33 @@ func (d Day7) Part1(inputPath string) (any, error) {
 }
 
 func (d Day7) Part2(inputPath string) (any, error) {
-	// input := aoc.ReadLines(inputPath)
-	return nil, nil
+	input := aoc.ReadLines(inputPath)
+
+	beams := make(map[int]int)
+
+	for i, c := range input[0] {
+		if c == 'S' {
+			beams[i] = 1
+		}
+	}
+
+	for _, l := range input[1:] {
+		for i, c := range l {
+			if c == '^' && beams[i] > 0 {
+				beams[i-1] += beams[i]
+				beams[i+1] += beams[i]
+				delete(beams, i)
+			}
+		}
+	}
+
+	total := 0
+
+	for _, v := range beams {
+		total += v
+	}
+
+	return total, nil
 }
 
 func init() {
