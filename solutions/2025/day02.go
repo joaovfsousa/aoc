@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/log"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
-	"github.com/joaovfsousa/aoc/pkg/aoc/str"
+	"github.com/joaovfsousa/aoc/pkg/convert"
 )
 
 type Day2 struct{}
@@ -26,9 +26,9 @@ func loop(inputPath string, calculateInvalidSum func(i int) int) (int, error) {
 	for r := range aoc.IterBySeparator(inputPath, ",") {
 		sepIndex := strings.Index(r, "-")
 
-		min := str.StringToInt(r[0:sepIndex])
+		min := convert.StringToInt(r[0:sepIndex])
 
-		max := str.StringToInt(r[sepIndex+1:])
+		max := convert.StringToInt(r[sepIndex+1:])
 
 		for i := min; i < max+1; i++ {
 			invalidIdsSum += calculateInvalidSum(i)

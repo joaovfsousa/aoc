@@ -4,7 +4,7 @@ import (
 	"github.com/charmbracelet/log"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
-	"github.com/joaovfsousa/aoc/pkg/aoc/str"
+	"github.com/joaovfsousa/aoc/pkg/convert"
 )
 
 type Day01 struct{}
@@ -30,7 +30,7 @@ func (Day01) Part1(inputPath string) (any, error) {
 		side := l[:1]
 		clicksStr := l[1:]
 
-		clicks := str.StringToInt(clicksStr)
+		clicks := convert.StringToInt(clicksStr)
 
 		if side == "L" {
 			dial = modulo100(dial - clicks)
@@ -57,7 +57,7 @@ func (Day01) Part2(inputPath string) (any, error) {
 		side := l[:1]
 		clicksStr := l[1:]
 
-		clicks := str.StringToInt(clicksStr)
+		clicks := convert.StringToInt(clicksStr)
 
 		distanceToZero := 0
 

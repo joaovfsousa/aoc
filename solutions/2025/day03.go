@@ -6,7 +6,7 @@ import (
 	"github.com/charmbracelet/log"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
-	"github.com/joaovfsousa/aoc/pkg/aoc/str"
+	"github.com/joaovfsousa/aoc/pkg/convert"
 )
 
 type Day3 struct{}
@@ -18,12 +18,12 @@ func (d Day3) Part1(inputPath string) (any, error) {
 	total := 0
 	for l := range aoc.IterLines(inputPath) {
 		lineLen := len(l)
-		firstB := str.StringToInt(string(l[0]))
+		firstB := convert.StringToInt(string(l[0]))
 
-		secondB := str.StringToInt(string(l[1]))
+		secondB := convert.StringToInt(string(l[1]))
 
 		for i, nAsRune := range l {
-			n := str.StringToInt(string(nAsRune))
+			n := convert.StringToInt(string(nAsRune))
 			if i == 0 {
 				continue
 			}
@@ -39,7 +39,7 @@ func (d Day3) Part1(inputPath string) (any, error) {
 			}
 		}
 
-		jottage := str.StringToInt(fmt.Sprintf("%v%v", firstB, secondB))
+		jottage := convert.StringToInt(fmt.Sprintf("%v%v", firstB, secondB))
 
 		log.Debugf("jottage = %v", jottage)
 
@@ -66,19 +66,19 @@ func (d Day3) Part2(inputPath string) (any, error) {
 
 				log.Debugf("evalIndex= %v, toRemove= %v, num= %v, firstPart= %v, secondPart= %v, eval= %v", evalIndex, toRemove, num, firstPart, secondPart, eval)
 
-				if str.StringToInt(newNum) > str.StringToInt(mmax) {
+				if convert.StringToInt(newNum) > convert.StringToInt(mmax) {
 					mmax = newNum
 				}
 			}
 
-			if str.StringToInt(mmax) > str.StringToInt(num) {
+			if convert.StringToInt(mmax) > convert.StringToInt(num) {
 				num = mmax
 			}
 		}
 
 		log.Debugf("Max = %v", num)
 
-		total += str.StringToInt(num)
+		total += convert.StringToInt(num)
 	}
 
 	return total, nil

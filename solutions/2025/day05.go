@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
-	"github.com/joaovfsousa/aoc/pkg/aoc/str"
+	"github.com/joaovfsousa/aoc/pkg/convert"
 )
 
 type Day5 struct{}
@@ -39,7 +39,7 @@ func (d Day5) Part1(inputPath string) (any, error) {
 	for l := range aoc.IterLines(inputPath) {
 		if hasFinishedRanges {
 
-			id := str.StringToInt(l)
+			id := convert.StringToInt(l)
 
 			for _, r := range ranges {
 				if r.containsElem(id) {
@@ -58,7 +58,7 @@ func (d Day5) Part1(inputPath string) (any, error) {
 
 		sepIndex := strings.Index(l, "-")
 
-		ranges = append(ranges, Range{Min: str.StringToInt(l[:sepIndex]), Max: str.StringToInt(l[sepIndex+1:])})
+		ranges = append(ranges, Range{Min: convert.StringToInt(l[:sepIndex]), Max: convert.StringToInt(l[sepIndex+1:])})
 	}
 
 	return freshCount, nil
@@ -74,8 +74,8 @@ func (d Day5) Part2(inputPath string) (any, error) {
 
 		sepIndex := strings.Index(l, "-")
 
-		min := str.StringToInt(l[:sepIndex])
-		max := str.StringToInt(l[sepIndex+1:])
+		min := convert.StringToInt(l[:sepIndex])
+		max := convert.StringToInt(l[sepIndex+1:])
 
 		ranges = append(ranges, Range{Min: min, Max: max})
 	}

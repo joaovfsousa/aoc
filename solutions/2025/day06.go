@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/joaovfsousa/aoc/pkg/aoc"
-	"github.com/joaovfsousa/aoc/pkg/aoc/str"
+	"github.com/joaovfsousa/aoc/pkg/convert"
 )
 
 type Day6 struct{}
@@ -55,7 +55,7 @@ func (d Day6) Part1(inputPath string) (any, error) {
 		}
 
 		for r := 0; r < len(input)-1; r++ {
-			val := str.StringToInt(input[r][c])
+			val := convert.StringToInt(input[r][c])
 			if op == "*" {
 				columnTotal *= val
 				continue
@@ -125,11 +125,11 @@ func (d Day6) Part2(inputPath string) (any, error) {
 		}
 
 		if op == "*" {
-			accumulated *= str.StringToInt(item)
+			accumulated *= convert.StringToInt(item)
 			continue
 		}
 
-		accumulated += str.StringToInt(item)
+		accumulated += convert.StringToInt(item)
 	}
 
 	total += accumulated
