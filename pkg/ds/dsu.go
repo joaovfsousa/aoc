@@ -87,3 +87,18 @@ func (ds *DisjointSet[T]) AllSetSizes() map[T]int {
 	}
 	return result
 }
+
+func (ds *DisjointSet[T]) CountSets() int {
+	// First, compress all paths to ensure parent pointers are up to date
+	for node := range ds.parent {
+		ds.Find(node)
+	}
+	total := 0
+	// Now count only actual roots (where parent[x] == x)
+	for node := range ds.parent {
+		if ds.parent[node] == node {
+			total++
+		}
+	}
+	return total
+}

@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/charmbracelet/log"
+
 	"github.com/joaovfsousa/aoc/pkg/aoc"
 	"github.com/joaovfsousa/aoc/pkg/convert"
 	"github.com/joaovfsousa/aoc/pkg/ds"
@@ -90,6 +92,8 @@ func (d Day8) Part1(inputPath string) (any, error) {
 		return 0, fmt.Errorf("expected at least 3 circuits, got %d", len(sizes))
 	}
 
+	log.Debugf("circuits := %v", ds.CountSets())
+
 	result := 1
 
 	for _, s := range sizes[:3] {
@@ -100,9 +104,62 @@ func (d Day8) Part1(inputPath string) (any, error) {
 }
 
 func (d Day8) Part2(inputPath string) (any, error) {
-	// TODO: implement
-	// Use one of the readers from pkg/aoc/readers.go
-	return nil, nil
+	boxes := []*Box{}
+
+	for line := range aoc.IterLines(inputPath) {
+		parts := strings.Split(line, ",")
+
+		box := Box{
+			x: convert.StringToInt(parts[0]),
+			y: convert.StringToInt(parts[1]),
+			z: convert.StringToInt(parts[2]),
+		}
+
+		boxes = append(boxes, &box)
+	}
+
+	ds := ds.NewDisjointSet(boxes...)
+
+	dists := []Dist{}
+
+	for i := 0; i < len(boxes)-1; i++ {
+		boxA := boxes[i]
+		for j := i + 1; j < len(boxes); j++ {
+			boxB := boxes[j]
+
+			dists = append(dists, Dist{
+				v: boxA.dist(*boxB),
+				a: boxA,
+				b: boxB,
+			})
+		}
+	}
+
+	slices.SortFunc(dists, func(d1, d2 Dist) int {
+		return d1.v - d2.v
+	})
+
+	lastTwoBoxes := []*Box{}
+
+	for i := range dists {
+		a, b := dists[i].a, dists[i].b
+
+		if !ds.Connected(a, b) && ds.CountSets() == 2 {
+			lastTwoBoxes = append(lastTwoBoxes, a)
+			lastTwoBoxes = append(lastTwoBoxes, b)
+
+			break
+		}
+
+		ds.Union(a, b)
+	}
+
+	boxA, boxB := lastTwoBoxes[0], lastTwoBoxes[1]
+
+	log.Debug(*boxA)
+	log.Debug(*boxB)
+
+	return boxA.x * boxB.x, nil
 }
 
 func init() {
